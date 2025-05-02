@@ -23,7 +23,6 @@ const fields = [
   { label: 'Grid Synchronization', unit: '' },
   { label: 'Phase Angle', unit: '°' },
   { label: 'Transfer Switch Status', unit: '' },
-  { label: 'Operator Name', unit: '' },
   { label: 'Timestamp', unit: '' },
   { label: 'Uptime', unit: 'Hours' }
 ];
