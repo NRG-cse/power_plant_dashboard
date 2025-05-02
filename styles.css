@@ -49,6 +49,7 @@ main {
 .company-name {
   font-size: 40px;
   font-weight: bold;
+  color: #003366;
 }
 button {
   margin-top: 20px;
