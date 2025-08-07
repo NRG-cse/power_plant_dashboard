@@ -5,31 +5,160 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Power Plant Dashboard</title>
   <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 </head>
 <body>
   <header>
-    <h1>Power Plant Dashboard Demo</h1>
-    <div id="clock"></div>
+    <div class="header-left">
+      <img src="pic/logo.png" alt="Company Logo" class="logo" />
+      <span class="company-name">N. R. Group</span>
+    </div>
+    <h1>Power Plant Dashboard</h1>
+    <div class="header-right">
+      <div id="clock"></div>
+    </div>
   </header>
 
   <main>
     <div class="left-section">
-      <div class="logo-container">
-        <img src="pic/logo.png" alt="Company Logo" class="logo" />
-        <span class="company-name">N. R. Group</span>
+      <div class="plant-controls">
+        <div class="plant-selector">
+          <label for="plant-select">Power Plant:</label>
+          <select id="plant-select" onchange="updatePlant()">
+            <option value="A">Arif Knitspin Ltd. Power Plant</option>
+            <option value="B">NRG Spinning Mills Ltd. Power Plant</option>
+            <option value="C">NRG Hometex Ltd. Power Plant</option>
+            <option value="D">A.T & T Spinning Mill Ltd. Power Plant</option>
+            <option value="E">NRG Composite Yarn Dyeing 1</option>
+            <option value="F">NRG Composite Yarn Dyeing 2</option>
+          </select>
+        </div>
+        <div class="generator-selector">
+          <label for="generator-select">Generator:</label>
+          <select id="generator-select" onchange="updateGenerator()">
+            <!-- Filled by JavaScript -->
+          </select>
+        </div>
       </div>
-      <div class="info-block">
-        <p><strong>Unit Name:</strong> Unit 1</p>
-        <p><strong>Generator Name:</strong> Generator A</p>
+      
+      <div class="status-fields" id="status-fields"></div>
+      
+      <div class="fuel-container">
+        <div class="fuel-level-display">
+          <div class="fuel-level-bar">
+            <div class="fuel-level-fill" id="fuel-level"></div>
+          </div>
+          <span class="fuel-percent" id="fuel-percent">75%</span>
+        </div>
+        <div class="tree-animation">
+          <div class="tree">
+            <div class="trunk"></div>
+            <div class="leaves"></div>
+            <div class="falling-leaves"></div>
+          </div>
+        </div>
       </div>
-      <button onclick="printReport()">Print Report</button>
     </div>
 
-    <div class="right-section" id="data-fields"></div>
+    <div class="right-section">
+      <div class="current-unit" id="current-unit"></div>
+      
+      <div class="right-data-groups">
+        <div class="data-group">
+          <div class="data-card">
+            <div class="data-header">
+              <strong>Voltage (L-L)</strong>
+              <span class="data-value" id="voltage-ll">0 V</span>
+            </div>
+            <div class="data-header">
+              <strong>Voltage (L-N)</strong>
+              <span class="data-value" id="voltage-ln">0 V</span>
+            </div>
+            <div class="data-header">
+              <strong>Current</strong>
+              <span class="data-value" id="current">0 A</span>
+            </div>
+            <div class="data-header">
+              <strong>Power Factor</strong>
+              <span class="data-value" id="power-factor">0</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="data-group">
+          <div class="data-card">
+            <div class="data-header">
+              <strong>Active Power</strong>
+              <span class="data-value" id="active-power">0 kW</span>
+            </div>
+            <div class="data-header">
+              <strong>Reactive Power</strong>
+              <span class="data-value" id="reactive-power">0 kVAR</span>
+            </div>
+            <div class="data-header">
+              <strong>Apparent Power</strong>
+              <span class="data-value" id="apparent-power">0 kVA</span>
+            </div>
+            <div class="data-header">
+              <strong>Frequency</strong>
+              <span class="data-value" id="frequency">0 Hz</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="data-group">
+          <div class="data-card">
+            <div class="data-header">
+              <strong>Energy Generated</strong>
+              <span class="data-value" id="energy-generated">0 kWh</span>
+            </div>
+            <div class="data-header">
+              <strong>Fuel Level</strong>
+              <span class="data-value" id="fuel-level-value">0%</span>
+            </div>
+            <div class="data-header">
+              <strong>Engine Speed</strong>
+              <span class="data-value" id="engine-speed">0 RPM</span>
+            </div>
+            <div class="data-header">
+              <strong>Battery Voltage</strong>
+              <span class="data-value" id="battery-voltage">0 V</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="data-group">
+          <div class="data-card">
+            <div class="data-header">
+              <strong>Coolant Temp</strong>
+              <span class="data-value" id="coolant-temp">0 °C</span>
+            </div>
+            <div class="data-header">
+              <strong>Oil Pressure</strong>
+              <span class="data-value" id="oil-pressure">0 Bar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="efficiency-card">
+        <div class="efficiency-tabs">
+          <button class="tab-btn active" onclick="changeEfficiencyView('day')">Day</button>
+          <button class="tab-btn" onclick="changeEfficiencyView('week')">Week</button>
+          <button class="tab-btn" onclick="changeEfficiencyView('month')">Month</button>
+          <button class="tab-btn" onclick="changeEfficiencyView('year')">Year</button>
+        </div>
+        <div class="efficiency-chart-container">
+          <canvas id="efficiencyChart"></canvas>
+        </div>
+        <div class="efficiency-stats" id="efficiency-stats"></div>
+      </div>
+    </div>
   </main>
 
   <footer>
-    <p>Copyright &copy; 2025. All rights reserved by N. R. Group R&D (Maintenance).</p>
+    <p>Copyright &copy; 2025 N. R. Group R&D (Maintenance)</p>
   </footer>
 
   <script src="script.js"></script>
