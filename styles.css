@@ -72,6 +72,7 @@ main {
   gap: 8px;
   flex: 1;
   overflow: hidden;
+  min-height: 0; /* Add this for proper flex layout */
 }
 
 .left-section {
@@ -238,12 +239,15 @@ select {
   display: flex;
   align-items: center;
   gap: 15px;
-  height: 80px;
+  height: auto;
   flex-shrink: 0;
 }
 
 .fuel-level-display {
   flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 .fuel-level-bar {
@@ -268,9 +272,24 @@ select {
 .fuel-percent {
   display: block;
   text-align: center;
-  margin-top: 3px;
   font-weight: 600;
   font-size: 0.7rem;
+}
+
+#print-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: background 0.3s;
+  width: 100%;
+}
+
+#print-btn:hover {
+  background: var(--secondary);
 }
 
 .tree-animation {
@@ -383,7 +402,11 @@ footer {
   }
 
   .left-section {
-    max-height: 250px;
+    max-height: none;
+  }
+  
+  .fuel-container {
+    flex-direction: row;
   }
 }
 
@@ -407,6 +430,10 @@ footer {
     height: auto;
   }
   
+  .tree-animation {
+    height: 80px;
+  }
+  
   .efficiency-stats {
     grid-template-columns: 1fr 1fr;
   }
@@ -419,5 +446,31 @@ footer {
 @media (max-width: 480px) {
   .right-data-groups {
     grid-template-columns: 1fr;
+  }
+  
+  .company-name {
+    font-size: 1.5rem;
+  }
+  
+  header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .printable-report, .printable-report * {
+    visibility: visible;
+  }
+  .printable-report {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+  .no-print {
+    display: none !important;
   }
 }
