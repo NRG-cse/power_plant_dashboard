@@ -61,6 +61,97 @@ function initDashboard() {
   startTabRotation();
 }
 
+// Print functionality
+function printDashboard() {
+  // Create a printable version of the current data
+  const printWindow = window.open('', '', 'width=900,height=600');
+  const now = new Date();
+  
+  // Get current values
+  const plantName = plants[currentPlant].name;
+  const generatorName = `Generator ${currentGenerator}`;
+  const statusValues = Array.from(document.querySelectorAll('.status-field span')).map(el => el.textContent);
+  const dataValues = {};
+  Object.keys(dataFields).forEach(id => {
+    dataValues[dataFields[id].label] = document.getElementById(id).textContent;
+  });
+  
+  // Generate the printable HTML
+  printWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Power Plant Report</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h1, h2 { color: #003366; }
+        .report-header { margin-bottom: 20px; }
+        .report-section { margin-bottom: 30px; }
+        .status-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+        .data-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .data-card { border: 1px solid #ddd; padding: 10px; border-radius: 5px; }
+        .data-header { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .timestamp { font-size: 0.8em; color: #666; margin-top: 30px; }
+      </style>
+    </head>
+    <body>
+      <div class="printable-report">
+        <div class="report-header">
+          <img src="pic/logo.png" alt="Logo" style="height: 50px;">
+          <h1>${plantName} - ${generatorName}</h1>
+          <h2>Operational Report</h2>
+        </div>
+        
+        <div class="report-section">
+          <h3>Current Status</h3>
+          <div class="status-grid">
+            ${Array.from(document.querySelectorAll('.status-field')).map(field => `
+              <div class="status-card">
+                <strong>${field.querySelector('strong').textContent.replace(':', '')}</strong>
+                <div>${field.querySelector('span').textContent}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div class="report-section">
+          <h3>Performance Metrics</h3>
+          <div class="data-grid">
+            ${Object.keys(dataValues).map(label => `
+              <div class="data-card">
+                <div class="data-header">
+                  <strong>${label}</strong>
+                  <span>${dataValues[label]}</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        
+        <div class="report-section">
+          <h3>Efficiency Data (${currentEfficiencyView})</h3>
+          <div style="width: 100%; height: 300px; background: #f5f5f5; display: flex; justify-content: center; align-items: center;">
+            [Efficiency Chart - ${currentEfficiencyView} view]
+          </div>
+        </div>
+        
+        <div class="timestamp">
+          Report generated: ${now.toLocaleString()}
+        </div>
+      </div>
+      
+      <script>
+        setTimeout(() => {
+          window.print();
+          window.close();
+        }, 500);
+      </script>
+    </body>
+    </html>
+  `);
+  printWindow.document.close();
+}
+
 // Clock
 function updateClock() {
   const now = new Date();
