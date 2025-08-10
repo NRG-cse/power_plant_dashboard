@@ -20,10 +20,10 @@
 body {
   background-color: var(--background);
   color: var(--text);
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 header {
@@ -72,7 +72,7 @@ main {
   gap: 8px;
   flex: 1;
   overflow: hidden;
-  min-height: 0; /* Add this for proper flex layout */
+  min-height: 0;
 }
 
 .left-section {
@@ -384,9 +384,13 @@ footer {
   background: var(--primary);
   color: white;
   text-align: center;
-  padding: 8px;
-  font-size: 0.7rem;
+  padding: 12px 8px;
+  font-size: 0.8rem;
   flex-shrink: 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+  width: 100%;
 }
 
 @media (max-width: 1200px) {
@@ -411,6 +415,16 @@ footer {
 }
 
 @media (max-width: 768px) {
+  body {
+    padding-bottom: 40px;
+  }
+  
+  main {
+    min-height: calc(100vh - 120px);
+    overflow-y: auto;
+    padding-bottom: 10px;
+  }
+  
   header {
     flex-direction: column;
     gap: 8px;
@@ -441,6 +455,13 @@ footer {
   .right-data-groups {
     grid-template-columns: 1fr 1fr;
   }
+  
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
 }
 
 @media (max-width: 480px) {
@@ -454,6 +475,11 @@ footer {
   
   header h1 {
     font-size: 1.5rem;
+  }
+  
+  footer {
+    font-size: 0.7rem;
+    padding: 10px 5px;
   }
 }
 
