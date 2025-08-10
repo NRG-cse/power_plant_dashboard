@@ -389,20 +389,6 @@ footer {
   flex-shrink: 0;
 }
 
-/* Updated footer styles */
-footer {
-  background: var(--primary);
-  color: white;
-  text-align: center;
-  padding: 12px 8px;
-  font-size: 0.8rem;
-  flex-shrink: 0;
-  position: sticky;
-  bottom: 0;
-  z-index: 100;
-  width: 100%;
-}
-
 @media (max-width: 1200px) {
   main {
     flex-direction: column;
